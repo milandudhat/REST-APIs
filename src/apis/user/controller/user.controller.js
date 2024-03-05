@@ -67,9 +67,29 @@ const login = async (req, res) => {
     }
 }
 
+const getProfile = async (req, res) => {
+    try {
+
+
+        // check if user exists or not
+        if (!req.user) {
+            return APIResponseFormat._ResError(res, "User not found !!!");
+        }
+
+
+        const user = await UserService.getUserById(req.user.id);
+
+        return APIResponseFormat._ResSuccess(res, "User profile fetched successfully!!!", user);
+    }
+    catch (error) {
+        return APIResponseFormat._ResServerError(res, error);
+    }
+}
+
 
 
 module.exports = {
     signup,
-    login
+    login,
+    getProfile
 }

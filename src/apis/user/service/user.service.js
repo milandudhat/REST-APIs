@@ -53,8 +53,27 @@ const comparePassword = async (password) => {
     }
 }
 
+const getUserById = async (id) => {
+    try {
+        const user = await User.findOne({
+            where: {
+                id
+            },
+            attributes : {
+                exclude : ['password', 'deletedAt']
+            }
+        })
+
+        return user
+    }
+    catch (error) {
+        throw error
+    }
+}
+
 module.exports = {
     signup,
     getUserByEmail,
-    comparePassword
+    comparePassword,
+    getUserById
 }
