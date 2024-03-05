@@ -21,6 +21,9 @@ module.exports = {
       city :{
         type: Sequelize.STRING
       },
+      age :{
+        type: Sequelize.INTEGER
+      },
       deleted_at: {
         type: Sequelize.DATE
       },

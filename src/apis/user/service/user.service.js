@@ -1,53 +1,60 @@
 const db = require("../../../database/models");
+const md5 = require("md5");
 const User = db.user;
 
-const getAllUsers = async () => {
-    try {
-        const users = await User.findAll();
-        return users
-    } catch (error) {
-        throw error;
-    }
-}
 
-const addUser = async (user) => {
+const signup = async (user) => {
     try {
+
+        user.password = md5(user.password)
         const createdUser = await User.create(user);
+
+        // remove password from response
+        delete createdUser.dataValues.password
+
         return createdUser
     } catch (error) {
         throw error;
     }
 }
 
-const updateUser = async (id, user) => {
+const getUserByEmail = async (email) => {
     try {
-        const updatedUser = await User.update(user, {
+        const user = await User.findOne({
             where: {
-                id: id
+                email
             }
-        });
-        return updatedUser
-    } catch (error) {
-        throw error;
+        })
+        return user
+    }
+    catch (error) {
+        throw error
     }
 }
 
-const deleteUser = async (id) => {
+const comparePassword = async (password) => {
     try {
-        const deletedUser = await User.destroy({
+        const isPasswordCorrect = await User.findOne({
             where: {
-                id: id
+                password : md5(password)
             }
-        });
-        return deletedUser
-    } catch (error) {
-        throw error;
+            ,
+            attributes : {
+                exclude : ['password', 'deletedAt']
+            }
+        })
+
+        console.log(isPasswordCorrect);
+
+        return isPasswordCorrect
+    }
+    catch (error) {
+        throw error
     }
 }
 
 module.exports = {
-    getAllUsers,
-    addUser,
-    updateUser,
-    deleteUser
+    signup,
+    getUserByEmail,
+    comparePassword
 }
