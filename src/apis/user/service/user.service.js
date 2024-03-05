@@ -40,11 +40,11 @@ const comparePassword = async (password) => {
             }
             ,
             attributes : {
-                exclude : ['password', 'deletedAt']
+                exclude : ['password', 'deletedAt' , 'isLogin']
             }
         })
 
-        console.log(isPasswordCorrect);
+        // console.log(isPasswordCorrect);
 
         return isPasswordCorrect
     }
@@ -71,9 +71,30 @@ const getUserById = async (id) => {
     }
 }
 
+const updateIsLogin = async (id, user) => {
+    try {
+
+        console.log(user);
+        const updatedUser = await User.update(user, {
+            where: {
+                id
+            },
+            attributes : {
+                exclude : ['deletedAt' , 'password']
+            }
+        })
+
+        return updatedUser
+    }
+    catch (error) {
+        throw error
+    }
+}
+
 module.exports = {
     signup,
     getUserByEmail,
     comparePassword,
-    getUserById
+    getUserById,
+    updateIsLogin
 }

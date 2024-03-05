@@ -38,6 +38,11 @@ const login = async (req, res) => {
             return APIResponseFormat._ResError(res, "Invalid credentials !!!");
         }
 
+        // check if user is isLogin or not
+        if (user.islogin) {
+            return APIResponseFormat._ResError(res, "User is already logged in !!!");
+        }
+
 
         // create a token
         const payload = {
@@ -56,6 +61,12 @@ const login = async (req, res) => {
             accessToken,
             ...userData.dataValues,
         }
+
+
+        // update isLogin
+        await UserService.updateIsLogin(user.id, {
+            islogin : true
+        });
 
 
 
@@ -86,10 +97,32 @@ const getProfile = async (req, res) => {
     }
 }
 
+const logout = async (req, res) => {
+    try {
+        
+        // check if user exists or not
+        if (!req.user) {
+            return APIResponseFormat._ResError(res, "User not found !!!");
+        }
+
+        // set isLogin to false
+        await UserService.updateIsLogin(req.user.id, {
+            islogin : false
+        })
+
+        return APIResponseFormat._ResSuccess(res, "User logged out successfully!!!");
+
+    }
+    catch (error) {
+        return APIResponseFormat._ResServerError(res, error);
+    }
+}
+
 
 
 module.exports = {
     signup,
     login,
-    getProfile
+    getProfile,
+    logout
 }

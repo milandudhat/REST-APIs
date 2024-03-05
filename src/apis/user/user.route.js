@@ -10,6 +10,9 @@ router.post('/signup', validateUserSchemaSignup,  UserController.signup);
 router.post('/login', validateUserSchemalogin,  UserController.login);
 router.get('/me', isSignedIn, UserController.getProfile);
 
+// logout 
+router.get('/logout', isSignedIn, UserController.logout);
+
 
 
 module.exports = router

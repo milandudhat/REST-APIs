@@ -24,6 +24,9 @@ module.exports = {
       age :{
         type: Sequelize.INTEGER
       },
+      islogin :{
+        type: Sequelize.BOOLEAN
+      },
       deleted_at: {
         type: Sequelize.DATE
       },
